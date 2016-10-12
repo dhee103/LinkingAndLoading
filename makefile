@@ -9,8 +9,8 @@ all: main
 .PHONY: all main clean
 
 main: chello.c writeexit.s
-	$(CC) -c chello.c -o chello.o 
-	as writeexit.s -o writeexit.o 
+	$(CC) -c chello.c -o chello.o
+	as writeexit.s -o writeexit.o
 	ld -N chello.o writeexit.o -o chello
 
 clean:
