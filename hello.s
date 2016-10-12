@@ -1,7 +1,8 @@
+
         .text
-        .globl _start    
+        .globl _start
 _start:
-        movl   $0x4, %eax       # eax = code for 'write' system call   
+        movl   $0x4, %eax       # eax = code for 'write' system call
         movl   $1, %ebx         # ebx = file descriptor to standard output
         movl   $message, %ecx   # ecx = pointer to the message
         movl   $13, %edx        # edx = length of the message
@@ -11,5 +12,5 @@ _start:
         int    $0x80            # make the system call
         .data
         .globl message
-message:        
+message:
         .string "Hello world!\n" # The message as data
