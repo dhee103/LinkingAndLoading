@@ -6,15 +6,12 @@ CFLAGS=-c -Wall -Werror -pedantic -std=c99
 
 all: main
 
-.PHONY: all main clean link
+.PHONY: all main clean
 
-main: 
-	$(CC) chello.c -o chello.o  /
-	as writeexit.s -o writeexit.o
-
-link:
+main: chello.c writeexit.s
+	$(CC) -c chello.c -o chello.o 
+	as writeexit.s -o writeexit.o 
 	ld -N chello.o writeexit.o -o chello
-
 
 clean:
 	rm -rf *.o
