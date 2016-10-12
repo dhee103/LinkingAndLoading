@@ -2,17 +2,16 @@
 
 CC=gcc
 
-CFLAGS=-c -Wall -Werror -pedantic -std=c99
+CFLAGS=-c
 
-all: main
+all: chello
 
 .PHONY: all main clean
 
-main: chello.c writeexit.s
-	$(CC) -c chello.c -o chello.o
+chello: chello.c writeexit.s
+	$(CC) $(CFLAGS) chello.c -o chello.o
 	as writeexit.s -o writeexit.o
 	ld -N chello.o writeexit.o -o chello
 
 clean:
-	rm -rf *.o
-	rm -rf chello
+	rm -rf *.o chello
