@@ -7,13 +7,13 @@ all: chello
 .PHONY: all clean
 
 chello.o: chello.c
-	$(CC) $(CFLAGS) $^ -o chello.o
+	$(CC) $(CFLAGS) $^ -o $@
 
 writeexit.o: writeexit.s
-	as $^ -o writeexit.o
+	as $^ -o $@
 
 chello: chello.o writeexit.o
-	ld -N $^ -o chello
+	ld -N $^ -o $@
 
 clean:
 	rm -rf *.o chello
