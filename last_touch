@@ -9,16 +9,17 @@ if ARGV.empty?
   targetPath = `pwd`
 end
 
-# check if targetPath is valid; if not [TODO] return appropriate message & non-zero exit code
+# check if the right number of arguments are specified
 if ARGV.length > 1
   puts "Too many arguments specified"
   exit 1
 end
 
- if !File.directory?(targetPath.strip)
-   puts "Argument isn't a directory"
-   exit 1
- end
+# check if the specified argument is a directory
+if !File.directory?(targetPath.strip)
+  puts "Argument isn't a directory"
+  exit 1
+end
 
 # check targetDirectory structure that have not been checked into git and split
 # into two different arrays using git ls-files
@@ -57,4 +58,4 @@ if !notInGit.empty?
   for i in 0..notInGit.length - 1
     puts "[***not under version control***]: #{notInGit[i]}"
   end
-end 
+end
