@@ -21,19 +21,21 @@ if !File.directory?(targetPath.strip)
   exit 1
 end
 
+Dir.chdir(targetPath)
+
 =begin
 check files at & below the targetDirectory to split into two arrays using
 git ls-files. The split is based on whether they are (inGit) or aren't
 (notInGit) under vc Using split (on new lines).
 I then remove trailing newlines and convert the strings into arrays of strings
 =end
-inGit = `git -C #{targetPath.strip} ls-files`.split(/\n+/)
-notInGit = `git -C #{targetPath.strip} ls-files --other`.split(/\n+/)
+inGit = `git ls-files`.split(/\n+/)
+notInGit = `git ls-files --other`.split(/\n+/)
 
 # obtain relevant data for files under vc & store in respective arrays
-dates = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
-revIDs = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
-authors = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --format=%an -- #{x}`.strip}
+dates = inGit.map{ |x| `git -C log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
+revIDs = inGit.map{ |x| `git -C log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
+authors = inGit.map{ |x| `git -C log --no-merges -n 1 --format=%an -- #{x}`.strip}
 
 =begin
 check if there are files under version control i.e. if inGit is empty
