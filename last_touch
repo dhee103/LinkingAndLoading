@@ -1,1 +1,1 @@
-# edit this file to build your last_touch script as required for question 7.
+./simple.rb "$@"
