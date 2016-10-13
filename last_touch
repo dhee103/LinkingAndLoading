@@ -45,7 +45,7 @@ underVC.sort!{|a,b| b[0] <=> a[0]}
 
 # output the files under version control
 for i in 0..inGit.length - 1
-  puts "#{underVC[i][0]} [#{underVC[i][1]}]: #{underVC[i][2]}(#{underVC[i][3]}) "
+  puts "#{underVC[i][0]} [#{underVC[i][1]}]: #{underVC[i][2]} (#{underVC[i][3]}) "
 end
 
 # output the files not under version control
