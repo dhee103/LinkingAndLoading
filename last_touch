@@ -10,10 +10,15 @@ if ARGV.empty?
 end
 
 # check if targetPath is valid; if not [TODO] return appropriate message & non-zero exit code
-if ARGV.length > 1 || !File.directory?(targetPath.strip)
-  puts "you dun goofed son"
+if ARGV.length > 1
+  puts "Too many arguments specified"
   exit 1
 end
+
+ if !File.directory?(targetPath.strip)
+   puts "Argument isn't a directory"
+   exit 1
+ end
 
 # check targetDirectory structure that have not been checked into git and split
 # into two different arrays using git ls-files
@@ -36,12 +41,8 @@ for i in 0..inGit.length - 1
   underVC[i] = [dates[i], revIDs[i], inGit[i], authors[i]]
 end
 
-# puts "#{underVC}\n\n\n\n\n\n\n"
-
 #sort underVC 2d array by date which gives us an array with arrays containing the files information all sorted by datetime
 underVC.sort!{|a,b| b[0] <=> a[0]}
-
-# puts "#{underVC}"
 
 # output the files under version control
 for i in 0..inGit.length - 1
