@@ -41,7 +41,7 @@ if !inGit.empty?
   #
   # # obtain relevant data for files under vc & store in respective arrays
   # dates = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
-  # revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
+  revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
   # authors = inGit.map{ |x| `git log --no-merges -n 1 --format=%an -- #{x}`.strip}
 
 
@@ -51,7 +51,13 @@ if !inGit.empty?
   longest = inGit.max_by(&:length).length
   inGit.map!{|x| x.ljust(longest)}
 
-  underVC = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --pretty=format:"%ad [%h]: #{x} (%an)" -- #{x}`.strip}
+  # underVC = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --pretty=format:"%ad [%h]: #{x} (%an)" -- #{x}`.strip}
+  underVC = []
+  for i in 0..inGit.length - 1
+    underVC[i] = `git log --no-merges -n 1 --date=iso-strict --pretty=format:"%ad [#{revIDs[i]}]: #{inGit[i]} (%an)" -- #{inGit[i]}`.strip
+  end
+
+  underVC.sort!{ |x,y| y<=>x}
 
   # initialise a 2d array containing arrays of information about target files
   # underVC = Array.new(inGit.length - 1){Array.new(4)}
