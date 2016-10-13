@@ -21,7 +21,7 @@ if !File.directory?(targetPath.strip)
   exit 1
 end
 
-Dir.chdir(targetPath)
+Dir.chdir(targetPath.strip)
 
 =begin
 check files at & below the targetDirectory to split into two arrays using
