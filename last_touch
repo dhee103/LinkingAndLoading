@@ -23,13 +23,13 @@ end
 # check targetDirectory structure that have not been checked into git and split
 # into two different arrays using git ls-files
 # Using split (on new lines) I then convert the strings into arrays
-inGit = `git ls-files`.split(/\n+/)
-notInGit = `git ls-files --other`.split(/\n+/)
+inGit = `git -C #{targetPath.strip} ls-files`.split(/\n+/)
+notInGit = `git -C #{targetPath.strip} ls-files --other`.split(/\n+/)
 
 # parse appropriate data for files under version control and store this data in their appropriate arrays
-dates = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
-revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
-authors = inGit.map{ |x| `git log --no-merges -n 1 --format=%an -- #{x}`.strip}
+dates = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
+revIDs = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
+authors = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --format=%an -- #{x}`.strip}
 
 # find the longest filepath and then pad appropriately
 longest = inGit.max_by(&:length).length
