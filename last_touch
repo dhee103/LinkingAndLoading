@@ -49,6 +49,6 @@ for i in 0..inGit.length - 1
 end
 
 # output the files not under version control
-for i in 0..notInGit.length
+for i in 0..notInGit.length - 1
   puts "[***not under version control***]: #{notInGit[i]}"
 end
