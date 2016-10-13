@@ -21,6 +21,7 @@ if !File.directory?(targetPath.strip)
   exit 1
 end
 
+# change the directory to the path specified
 Dir.chdir(targetPath.strip)
 
 =begin
@@ -32,33 +33,41 @@ I then remove trailing newlines and convert the strings into arrays of strings
 inGit = `git ls-files`.split(/\n+/)
 notInGit = `git ls-files --other`.split(/\n+/)
 
-# obtain relevant data for files under vc & store in respective arrays
-dates = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
-revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
-authors = inGit.map{ |x| `git log --no-merges -n 1 --format=%an -- #{x}`.strip}
-
 =begin
 check if there are files under version control i.e. if inGit is empty
 if not we can ignore them and hence the following code
 =end
 if !inGit.empty?
+  #
+  # # obtain relevant data for files under vc & store in respective arrays
+  # dates = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --format=%ad -- #{x}`.strip}
+  # revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
+  # authors = inGit.map{ |x| `git log --no-merges -n 1 --format=%an -- #{x}`.strip}
+
+
+
+
     # find the longest filepath and then pad the target files appropriately
   longest = inGit.max_by(&:length).length
   inGit.map!{|x| x.ljust(longest)}
 
-  # initialise a 2d array containing arrays of information about target files
-  underVC = Array.new(inGit.length - 1){Array.new(4)}
-  for i in 0..inGit.length - 1
-    underVC[i] = [dates[i], revIDs[i], inGit[i], authors[i]]
-  end
+  underVC = inGit.map{ |x| `git log --no-merges -n 1 --date=iso-strict --pretty=format:"%ad [%h]: #{x} (%an)" -- #{x}`.strip}
 
-  #sort files under vc by datetime
-  underVC.sort!{|a,b| b[0] <=> a[0]}
+  # initialise a 2d array containing arrays of information about target files
+  # underVC = Array.new(inGit.length - 1){Array.new(4)}
+  # for i in 0..inGit.length - 1
+  #   underVC[i] = [dates[i], revIDs[i], inGit[i], authors[i]]
+  # end
+  #
+  # #sort files under vc by datetime
+  # underVC.sort!{|a,b| b[0] <=> a[0]}
 
   # output files under vc
-  for i in 0..inGit.length - 1
-    puts "#{underVC[i][0]} [#{underVC[i][1]}]: #{underVC[i][2]} (#{underVC[i][3]})"
-  end
+  # for i in 0..inGit.length - 1
+  #   puts "#{underVC[i][0]} [#{underVC[i][1]}]: #{underVC[i][2]} (#{underVC[i][3]})"
+  # end
+
+  underVC.each{ |x| puts x}
 end
 
 # checks if there any files not under vc; if not we can ignore this code
