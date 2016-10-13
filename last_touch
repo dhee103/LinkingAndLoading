@@ -32,8 +32,10 @@ revIDs = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --forma
 authors = inGit.map{ |x| `git -C #{targetPath.strip} log --no-merges -n 1 --format=%an -- #{x}`.strip}
 
 # find the longest filepath and then pad appropriately
-longest = inGit.max_by(&:length).length
-inGit.map!{|x| x.ljust(longest)}
+if !inGit.empty?
+  longest = inGit.max_by(&:length).length
+  inGit.map!{|x| x.ljust(longest)}
+end
 
 # initialise a 2d array containing arrays of information about target files
 underVC = Array.new(inGit.length - 1){Array.new(4)}
