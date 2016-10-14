@@ -26,7 +26,8 @@ How many relocation records are there in the file hello (the result of linking h
 Explain how you arrived at your answer.
 
 Answer:
-0. Using the objdump --all-headers command as before, I didn't find any relocation records.
+0. Using the objdump --all-headers command as before, I didn't find any relocation record
+as they've all been loaded in their particular addresses by the linux loader.
 
 Question 4:
 What happens if you try to link chello.o using ld as you did with hello.o
@@ -38,6 +39,12 @@ We get the following warning from ld: "warning: cannot find entry symbol _start;
 The reason that this occurs is that there is are undefined refereces to 'writeA'
 and 'exitA' in chello. These references come from "writeexit.o" and as the two files
 haven't been linked the linker can't make sense of the references hence the "undefined references" message.
+With "nm chello.o" we can see that exitA and writeA is undefined as they have "-u" preceding the message.
+                 U exitA
+0000000000000000 T main
+0000000000000000 D message
+                 U writeA
+
 
 Question 5:
 The last instruction in hello.s is an exit system call.
