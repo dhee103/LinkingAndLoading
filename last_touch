@@ -43,14 +43,14 @@ if !inGit.empty?
   inGit.map!{|x| x.ljust(longest)}
 
   # obtain relevant data for files under vc & store in an array
-  # the hash ID's are found separately as I was unable to find a way to limit it to 5 characters within the git command
-  revIDs = inGit.map{ |x| `git log --no-merges -n 1 --format=%h -- #{x} | cut -c1-5`.strip}
   underVC = []
   for i in 0..inGit.length - 1
-    underVC[i] = `git log --no-merges -n 1 --date=iso-strict --pretty=format:"%ad [#{revIDs[i]}]: #{inGit[i]} (%an)" -- #{inGit[i]}`.strip
+    underVC[i] = `git log --no-merges -n 1 --abbrev=5 --date=iso-strict --pretty=format:"%ad [%h]: #{inGit[i]} (%an)" -- #{inGit[i]}`.strip
   end
 
-  #sort files under vc by datetime
+  # sort files under vc by datetime
+  # the sort is actually done by lexographic order but this achieves the desired
+  # result as the format of is consistent and in a logical order
   underVC.sort!{ |x,y| y<=>x}
 
   # output files under vc

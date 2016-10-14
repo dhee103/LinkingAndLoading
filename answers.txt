@@ -8,37 +8,45 @@ How big (how many bytes) is the program code section of the file hello.o?
 Explain how you arrived at your answer, including any mathematical conversions you had to make.
 
 Answer:
- 
- 
+Using the objdump --all-headers command I found the size of the .text section.
+The size was given in hexadecimal as "00000022" which is 34 in denary i.e. 34 bytes.
+This was corroborated by the objdump --disassemble command in which I could manually
+count the number of bytes under start.
+
 Question 2:
-How many relocation records are there in the file hello.o? 
+How many relocation records are there in the file hello.o?
 Name them and explain how you arrived at your answer.
 
 Answer:
+Using the objdump --all-headers command I found that there was 1 relocation record titled "message"
 
 
 Question 3:
 How many relocation records are there in the file hello (the result of linking hello.o)?
-Explain how you arrived at your answer. 
+Explain how you arrived at your answer.
 
 Answer:
-
+0. Using the objdump --all-headers command as before, I didn't find any relocation records.
 
 Question 4:
-What happens if you try to link chello.o using ld as you did with hello.o 
+What happens if you try to link chello.o using ld as you did with hello.o
 (that is by running the command: ld -N chello.o -o chello)?
 Explain what has happened and how the nm utility can be used to confirm this.
 
 Answer:
+We get the following warning from ld: "warning: cannot find entry symbol _start; defaulting to 00000000004000b0"
+The reason that this occurs is that there is are undefined refereces to 'writeA'
+and 'exitA' in chello. These references come from "writeexit.o" and as the two files
+haven't been linked the linker can't make sense of the references hence the "undefined references" message.
 
- 
 Question 5:
-The last instruction in hello.s is an exit system call. 
+The last instruction in hello.s is an exit system call.
 What would happen if you assembled, linked and ran this programs with this instruction commented out?
 (Hint: you might want to try this)
 Explain why this happens. Does the program still terminate?
 
 Answer:
-
-
- 
+The correct message ("Hello World!") is output but we also get a segmentation fault.
+This is because without the exit system call the program will begin executing whatever bytes are in the RAM
+immediately following the programs execution. While we can't predict what is in these bytes we can assume that
+,as there is a seg fault, the data will be a memory access outside of the process memory for hello.s.
